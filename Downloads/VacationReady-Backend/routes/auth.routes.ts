@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -8,11 +8,12 @@ const users: { email: string; passwordHash: string }[] = [];
 
 const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
 
-router.post('/signup', async (req, res) => {
+router.post('/signup', async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   if (users.find(u => u.email === email)) {
-    return res.status(400).json({ message: 'User already exists' });
+    res.status(400).json({ message: 'User already exists' });
+    return;
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
@@ -22,20 +23,26 @@ router.post('/signup', async (req, res) => {
   res.json({ token });
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   const user = users.find(u => u.email === email);
-  if (!user) return res.status(401).json({ message: 'Invalid credentials' });
+  if (!user) {
+    res.status(401).json({ message: 'Invalid credentials' });
+    return;
+  }
 
   const isMatch = await bcrypt.compare(password, user.passwordHash);
-  if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+  if (!isMatch) {
+    res.status(401).json({ message: 'Invalid credentials' });
+    return;
+  }
 
   const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '1h' });
   res.json({ token });
 });
 
-router.get('/authtest', (req, res) => {
+router.get('/authtest', (req: Request, res: Response) => {
   res.json({ message: 'Auth test successful' });
 });
 
