@@ -1,3 +1,4 @@
+console.log("✅ Express server starting...");
 import express from 'express';
 import authRoutes from './routes/auth.routes';
 
