@@ -1,13 +1,12 @@
 import express from 'express';
 const app = express();
-const PORT = process.env.PORT || 3001;
 
-app.use(express.json());
+const PORT = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
-  res.send('VacationReady backend is running!');
+  res.send('Backend is running');
 });
 
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+  console.log(`✅ Server is running on port ${PORT}`);
 });
