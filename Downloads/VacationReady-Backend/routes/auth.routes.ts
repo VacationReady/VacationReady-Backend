@@ -35,4 +35,8 @@ router.post('/login', async (req, res) => {
   res.json({ token });
 });
 
+router.get('/authtest', (req, res) => {
+  res.json({ message: 'Auth test successful' });
+});
+
 export default router;
